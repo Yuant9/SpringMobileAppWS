@@ -1,14 +1,17 @@
 package com.spring.app.ws.service.iml;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spring.app.ws.controller.service.UserService;
-import com.spring.app.ws.io.entity.User;
+import com.spring.app.ws.io.entity.Users;
 import com.spring.app.ws.repository.UserRepository;
 import com.spring.app.ws.shared.Utils;
 import com.spring.app.ws.shared.dto.UserDto;
@@ -29,13 +32,13 @@ public class UserServiceImp implements UserService{
 	@Override
 	public UserDto createUser(UserDto userDto) {
 		if(userRepo.findByEmail(userDto.getEmail())!=null)throw new RuntimeException("user already exists!");
-		User  userEntity = new  User();
+		Users  userEntity = new  Users();
 		BeanUtils.copyProperties(userDto, userEntity);
 		
-		userEntity.setEncryptedPassword(bcrypt.encode(userDto.getPassword()));;
+		userEntity.setEncryptedPassword(bcrypt.encode(userDto.getPassword()));
 		userEntity.setUserId(utils.generateRandomString(10));
 
-		User storedUser = userRepo.save(userEntity);
+		Users storedUser = userRepo.save(userEntity);
 		UserDto returnUser = new UserDto();
 		BeanUtils.copyProperties(storedUser, returnUser);
 		
@@ -43,7 +46,9 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+		Users  user = userRepo.findByEmail(email);
+		if(user==null) throw new UsernameNotFoundException(email);
+		return new User(user.getEmail(),user.getPassword(),new ArrayList<>());
 	}}

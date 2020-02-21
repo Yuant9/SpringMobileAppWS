@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class User implements Serializable {
+public class Users implements Serializable {
 
 	private static final long serialVersionUID = -810883734542193706L;
 	@Id

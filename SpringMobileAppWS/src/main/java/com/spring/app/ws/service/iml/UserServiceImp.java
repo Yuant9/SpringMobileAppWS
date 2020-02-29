@@ -44,11 +44,25 @@ public class UserServiceImp implements UserService{
 		
 		return returnUser;
 	}
+	
+	/**get UserDto object by finding user entity from database, 
+	 * then convert to userDto by copy properties 
+	 */
+	@Override
+	public UserDto getUser(String email) {
+		Users  user = userRepo.findByEmail(email);
+		if(user  == null) {
+			throw new UsernameNotFoundException(email);
+		}
+		UserDto returnUser = new UserDto();
+		BeanUtils.copyProperties(user,returnUser);
+		return returnUser;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		Users  user = userRepo.findByEmail(email);
 		if(user==null) throw new UsernameNotFoundException(email);
-		return new User(user.getEmail(),user.getPassword(),new ArrayList<>());
+		return new User(user.getEmail(),user.getEncryptedPassword(),new ArrayList<>());
 	}}

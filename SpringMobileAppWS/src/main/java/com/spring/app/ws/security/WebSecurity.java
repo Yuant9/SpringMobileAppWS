@@ -13,7 +13,7 @@ import com.spring.app.ws.controller.service.UserService;
 public class WebSecurity extends WebSecurityConfigurerAdapter{
 	private final UserService userDetailsService ;
 	private final BCryptPasswordEncoder bCryptpasswordEncoder ;
-	private static final String SIGN_UP_URL = "/users";
+	private static final String SIGN_UP_URL = "/users/login";
 	
 	public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptpasswordEncoder) {
 		super();
@@ -24,12 +24,20 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST,SIGN_UP_URL)
-		.permitAll().anyRequest().authenticated();
+		.permitAll().anyRequest().authenticated().and().addFilter(getAuthenticationFilter())
+		.addFilter(new AuthorizationFilter(authenticationManager()));
 	}
 	
+	//encode  password by BCryptPasswordEncoder
 	@Override
 	public void configure(AuthenticationManagerBuilder auth)throws Exception{
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptpasswordEncoder);
+	}
+	
+	public AuthenticationFilter getAuthenticationFilter() throws Exception{
+		final AuthenticationFilter filter  = new AuthenticationFilter(authenticationManager());
+		filter.setFilterProcessesUrl("/users/login");
+		return filter;
 	}
 
 	

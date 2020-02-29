@@ -9,4 +9,6 @@ import com.spring.app.ws.io.entity.Users;
 public interface UserRepository extends CrudRepository<Users, Long> {
 
 	public Users  findByEmail(String email);
+
+	public Users findByUserId(String userId);
 }

@@ -8,6 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.spring.app.ws.security.AppProperties;
+
 @EnableJpaRepositories("com.spring.app.ws.*")
 @ComponentScan(basePackages = { "com.spring.app.ws.*" })
 @EntityScan("com.spring.app.ws.*")   
@@ -27,5 +29,7 @@ public class SpringMobileAppWsApplication {
 	public SpringApplicationContext springApplicationContext() {
 		return new SpringApplicationContext();
 	}
+	
+
 
 }

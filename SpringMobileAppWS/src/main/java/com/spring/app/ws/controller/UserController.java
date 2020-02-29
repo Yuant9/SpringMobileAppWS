@@ -3,6 +3,7 @@ package com.spring.app.ws.controller;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,12 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@GetMapping
-	public String getUser() {
-		return "get user was called";
+	@GetMapping(path="/{id}")
+	public UserDetail getUser(@PathVariable String id) {
+		UserDetail userDetail = new UserDetail();
+		UserDto userDto = userService.getUserById(id);
+		BeanUtils.copyProperties(userDto, userDetail);
+		return userDetail;
 	}
 	
 	@PostMapping

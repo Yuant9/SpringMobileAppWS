@@ -56,7 +56,7 @@ protected void successfulAuthentication(HttpServletRequest req,
 	
 	String  token  = Jwts.builder().setSubject(userName)
 									.setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
-									.signWith(SignatureAlgorithm.HS512,SecurityConstants.TOKEN_SECRET).compact();
+									.signWith(SignatureAlgorithm.HS512,SecurityConstants.getSecretToken()).compact();
 	res.addHeader(SecurityConstants.HEAD_STRING, SecurityConstants.TOKEN_PREFIX+token);
 	
 	//get userService bean by ApringApplicationContext instead of @Autowired since UserService is not registered as a bean

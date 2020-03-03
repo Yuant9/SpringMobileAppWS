@@ -78,7 +78,7 @@ public class UserController {
 	
 	@GetMapping
 	(produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
-	public List<UserDetail> getUsers(@RequestParam (value = "page",defaultValue = "1")int page, 
+	public List<UserDetail> getUsers(@RequestParam (value = "page",defaultValue = "0")int page, 
 			@RequestParam (value="limit",defaultValue="10")int limit){
 		List <UserDto> users = userService.getUsers(page,limit);
 		
